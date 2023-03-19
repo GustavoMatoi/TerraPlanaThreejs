@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sistema Solar Three.js</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="three.js-master/build/three.js"></script>
+    <script>
+      // Criando a cena
+      const scene = new THREE.Scene();
+
+      // Criando a camera
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      camera.position.z = 5;
+
+      // Criando o renderizador
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+    // Criando a terra
+    const geometry = new THREE.CircleGeometry(8.8, 60, 60);
+
+    // Criando o sol
+    const geometrySol = new THREE.SphereGeometry(3.3, 15, 15);
+
+    // Criando a lua
+    const geometryLua = new THREE.SphereGeometry(2.2, 15, 15);
+
+    // Carregando a textura da terra
+    const carregadorDaTexturaTerra = new THREE.TextureLoader();
+    const texturaTerra = carregadorDaTexturaTerra.load('https://i.imgur.com/ScsMBPJ.png');
+
+  // Carregando a textura do sol
+  const carregadorDaTexturaSol = new THREE.TextureLoader();
+    const texturaSol = carregadorDaTexturaSol.load('https://i.imgur.com/xhXzWKW.jpg');
+
+      
+    //Carregando a textura da lua
+    const carregadorDaTexturaLua = new THREE.TextureLoader()
+    const texturaLua = carregadorDaTexturaTerra.load('https://i.imgur.com/pRybefE.jpg')
+
+    // Criando o material com a textura
+    const material = new THREE.MeshBasicMaterial({ map: texturaTerra });
+    const materialSol = new THREE.MeshBasicMaterial({ map: texturaSol });
+    const materialLua = new THREE.MeshBasicMaterial({map: texturaLua})
+
+
+    //criando as variaveis dos planetas
+    const terra = new THREE.Mesh(geometry, material);
+    const sol = new THREE.Mesh(geometrySol, materialSol);
+    const lua = new THREE.Mesh(geometryLua, materialLua)
+
+
+    //adicionando as cenas
+    camera.position.set(50, 50, 50)
+    camera.lookAt(0, 0, 0);
+    terra.add(sol)
+    terra.add(lua)
+    scene.add(terra);
+    
+    sol.position.set(-20, 15, -3)
+        lua.position.set(20, 20, 3)
+      // Animação
+      function animate() {
+        requestAnimationFrame(animate);
+
+        terra.rotation.z += 0.01
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    </script>
+  </body>
+</html>
